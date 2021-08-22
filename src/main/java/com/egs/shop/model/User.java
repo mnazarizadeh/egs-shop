@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,7 +35,7 @@ public class User implements Serializable {
     private String email;
 
     @Column(name = "create_date", nullable = false)
-    private Instant createDate;
+    private LocalDateTime createDate;
 
     @Column(name = "enable", nullable = false)
     private boolean enable;
