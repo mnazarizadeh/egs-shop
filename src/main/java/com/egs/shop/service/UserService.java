@@ -5,9 +5,9 @@ import com.egs.shop.web.rest.vm.LoginVM;
 import com.egs.shop.web.rest.vm.ManagedUserVM;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Component;
 
-@Component
+import java.util.List;
+
 public interface UserService {
 
     UserDTO registerUser(ManagedUserVM registerUserDTO);
@@ -19,4 +19,6 @@ public interface UserService {
     Page<UserDTO> getAllUsers(Pageable pageable);
 
     String loginUser(LoginVM loginVM);
+
+    List<String> getAuthorities();
 }

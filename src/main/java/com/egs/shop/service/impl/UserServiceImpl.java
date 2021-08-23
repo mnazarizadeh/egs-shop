@@ -9,7 +9,7 @@ import com.egs.shop.model.User;
 import com.egs.shop.security.AuthoritiesConstants;
 import com.egs.shop.model.dto.UserDTO;
 import com.egs.shop.model.mapper.UserMapper;
-import com.egs.shop.repository.RoleRepository;
+import com.egs.shop.repository.AuthorityRepository;
 import com.egs.shop.repository.UserRepository;
 import com.egs.shop.security.jwt.TokenProvider;
 import com.egs.shop.service.UserService;
@@ -25,11 +25,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -38,7 +40,7 @@ import java.util.Set;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
+    private final AuthorityRepository authorityRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -79,7 +81,7 @@ public class UserServiceImpl implements UserService {
         newUser.setCreateDate(LocalDateTime.now());
 
         Set<Authority> authorities = new HashSet<>();
-        roleRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
+        authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
         newUser.setAuthorities(authorities);
 
         userRepository.save(newUser);
@@ -117,6 +119,18 @@ public class UserServiceImpl implements UserService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         return tokenProvider.createToken(authentication, loginVM.isRememberMe());
+    }
+
+    /**
+     * Gets a list of all the authorities.
+     * @return a list of all the authorities.
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<String> getAuthorities() {
+        return authorityRepository.findAll().stream()
+                .map(Authority::getName)
+                .collect(Collectors.toList());
     }
 
     private boolean removeNonActivatedUser(User existingUser) {
