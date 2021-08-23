@@ -1,6 +1,6 @@
 package com.egs.shop.security;
 
-import com.egs.shop.model.Role;
+import com.egs.shop.exception.UserNotActivatedException;
 import com.egs.shop.model.User;
 import com.egs.shop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
+import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -23,18 +25,25 @@ public class UserDetailServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.debug("Authenticating {}", username);
 
-        User user = userRepository.findByUsername(username)
+        String lowercaseUsername = username.toLowerCase(Locale.ENGLISH);
+
+        User user = userRepository.findByUsername(lowercaseUsername)
                 .orElseThrow(() -> new UsernameNotFoundException("No user found with username: " + username));
+
+        if (!user.isActivated()) {
+            throw new UserNotActivatedException("User " + lowercaseUsername + " was not activated");
+        }
 
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(), user.getPassword(), getAuthorities(user));
     }
 
     private static Set<GrantedAuthority> getAuthorities (User user) {
-        return user.getRoles()
+        return user.getAuthorities()
                 .stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toSet());

@@ -4,7 +4,7 @@ import com.egs.shop.exception.EmailAlreadyUsedException;
 import com.egs.shop.exception.PasswordMismatchedException;
 import com.egs.shop.exception.UsernameAlreadyUsedException;
 import com.egs.shop.exception.UserNotFoundException;
-import com.egs.shop.model.Role;
+import com.egs.shop.model.Authority;
 import com.egs.shop.model.User;
 import com.egs.shop.security.AuthoritiesConstants;
 import com.egs.shop.model.dto.UserDTO;
@@ -21,7 +21,9 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -67,9 +69,9 @@ public class UserServiceImpl implements UserService {
         newUser.setEnable(true);
         newUser.setCreateDate(LocalDateTime.now());
 
-        Set<Role> roles = new HashSet<>();
-        roleRepository.findById(AuthoritiesConstants.USER).ifPresent(roles::add);
-        newUser.setRoles(roles);
+        Set<Authority> authorities = new HashSet<>();
+        roleRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
+        newUser.setAuthorities(authorities);
 
         userRepository.save(newUser);
         log.debug("Created Information for User: {}", newUser);
@@ -88,6 +90,15 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(UserNotFoundException::new);
         return userMapper.toDto(user);
+    }
+
+    @Override
+    public List<UserDTO> getAllUsers() {
+        List<User> users = userRepository.findAll();
+
+        return users.stream()
+                .map(userMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     private boolean removeNonActivatedUser(User existingUser) {

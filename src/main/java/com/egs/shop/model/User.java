@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -51,10 +50,10 @@ public class User implements Serializable {
 
     @ManyToMany
     @JoinTable(
-            name = "user_role",
+            name = "user_authority",
             joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") },
             inverseJoinColumns = { @JoinColumn(name = "role_name", referencedColumnName = "name") }
     )
-    private Set<Role> roles = new HashSet<>();
+    private Set<Authority> authorities = new HashSet<>();
 
 }

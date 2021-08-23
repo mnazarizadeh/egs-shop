@@ -6,13 +6,13 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "roles")
+@Table(name = "Authorities")
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class Role implements Serializable {
+public class Authority implements Serializable {
 
     private static final long serialVersionUID = 2345695746405409023L;
 

@@ -2,7 +2,8 @@ package com.egs.shop.security;
 
 public class AuthoritiesConstants {
 
-    public static final String ADMIN = "ADMIN_ROLE";
-    public static final String USER = "USER_ROLE";
+    public static final String ADMIN = "ROLE_ADMIN";
+    public static final String USER = "ROLE_USER";
+    public static final String ANONYMOUS = "ROLE_ANONYMOUS";
 
 }

@@ -40,6 +40,6 @@ public class UserDTO {
 
     private boolean activated;
 
-    private Set<String> roles;
+    private Set<String> authorities;
 
 }
