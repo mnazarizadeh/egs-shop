@@ -1,19 +1,20 @@
 package com.egs.shop.exception;
 
-import org.springframework.security.core.AuthenticationException;
+import com.egs.shop.model.constant.ExceptionMessage;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * This exception is thrown in case of a not activated user trying to authenticate.
  */
-public class UserNotActivatedException extends AuthenticationException {
-
-    private static final long serialVersionUID = 1L;
+@ResponseStatus(code = HttpStatus.FORBIDDEN)
+public class UserNotActivatedException extends EGSRuntimeException {
 
     public UserNotActivatedException(String message) {
         super(message);
     }
 
-    public UserNotActivatedException(String message, Throwable t) {
-        super(message, t);
+    public UserNotActivatedException() {
+        this(ExceptionMessage.USER_NOT_ACTIVATED);
     }
 }

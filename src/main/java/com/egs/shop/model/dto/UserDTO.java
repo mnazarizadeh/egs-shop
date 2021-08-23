@@ -36,7 +36,7 @@ public class UserDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime createDate;
 
-    private boolean enable;
+    private boolean blocked;
 
     private boolean activated;
 

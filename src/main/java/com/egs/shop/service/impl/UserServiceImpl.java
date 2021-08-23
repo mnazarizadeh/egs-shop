@@ -11,21 +11,25 @@ import com.egs.shop.model.dto.UserDTO;
 import com.egs.shop.model.mapper.UserMapper;
 import com.egs.shop.repository.RoleRepository;
 import com.egs.shop.repository.UserRepository;
+import com.egs.shop.security.jwt.TokenProvider;
 import com.egs.shop.service.UserService;
+import com.egs.shop.web.rest.vm.LoginVM;
 import com.egs.shop.web.rest.vm.ManagedUserVM;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -37,6 +41,8 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final TokenProvider tokenProvider;
 
     @Override
     public UserDTO registerUser(ManagedUserVM userVM) {
@@ -68,7 +74,8 @@ public class UserServiceImpl implements UserService {
         newUser.setEmail(userVM.getEmail().toLowerCase());
         // new user is pre active
         newUser.setActivated(true);
-        newUser.setEnable(true);
+        // new user is unblock
+        newUser.setBlocked(false);
         newUser.setCreateDate(LocalDateTime.now());
 
         Set<Authority> authorities = new HashSet<>();
@@ -99,6 +106,17 @@ public class UserServiceImpl implements UserService {
         Page<User> users = userRepository.findAll(pageable);
 
         return users.map(userMapper::toDto);
+    }
+
+    @Override
+    public String loginUser(LoginVM loginVM) {
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(loginVM.getUsername(), loginVM.getPassword());
+
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        return tokenProvider.createToken(authentication, loginVM.isRememberMe());
     }
 
     private boolean removeNonActivatedUser(User existingUser) {

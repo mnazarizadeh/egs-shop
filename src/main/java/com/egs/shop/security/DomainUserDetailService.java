@@ -1,5 +1,6 @@
 package com.egs.shop.security;
 
+import com.egs.shop.exception.UserBlockedException;
 import com.egs.shop.exception.UserNotActivatedException;
 import com.egs.shop.model.User;
 import com.egs.shop.repository.UserRepository;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 @Component("userDetailsService")
 @RequiredArgsConstructor
 @Slf4j
-public class UserDetailServiceImpl implements UserDetailsService {
+public class DomainUserDetailService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
@@ -36,6 +37,10 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
         if (!user.isActivated()) {
             throw new UserNotActivatedException("User " + lowercaseUsername + " was not activated");
+        }
+
+        if (user.isBlocked()) {
+            throw new UserBlockedException("User " + lowercaseUsername + " has been blocked.");
         }
 
         return new org.springframework.security.core.userdetails.User(

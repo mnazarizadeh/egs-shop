@@ -36,8 +36,8 @@ public class User implements Serializable {
     @Column(name = "create_date", nullable = false)
     private LocalDateTime createDate;
 
-    @Column(name = "enable", nullable = false)
-    private boolean enable;
+    @Column(name = "blocked", nullable = false)
+    private boolean blocked;
 
     @Column(name = "activated", nullable = false)
     private boolean activated;

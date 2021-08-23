@@ -10,4 +10,6 @@ public class ExceptionMessage {
     public static final String USERNAME_ALREADY_EXISTS = "Username already used for another account!";
     public static final String EMAIL_ALREADY_EXISTS = "Email already used for another account!";
     public static final String PASSWORD_NOT_MATCHED = "Password and confirm password not matched!";
+    public static final String USER_BLOCKED = "User has been blocked!";
+    public static final String USER_NOT_ACTIVATED = "User not activated yet.";
 }
