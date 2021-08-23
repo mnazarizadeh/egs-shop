@@ -50,7 +50,7 @@ public class User implements Serializable {
 
     @ManyToMany
     @JoinTable(
-            name = "user_authority",
+            name = "user_authorities",
             joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") },
             inverseJoinColumns = { @JoinColumn(name = "role_name", referencedColumnName = "name") }
     )

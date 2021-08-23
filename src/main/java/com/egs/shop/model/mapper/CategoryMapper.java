@@ -1,7 +1,9 @@
 package com.egs.shop.model.mapper;
 
 import com.egs.shop.model.Authority;
+import com.egs.shop.model.Category;
 import com.egs.shop.model.User;
+import com.egs.shop.model.dto.CategoryDTO;
 import com.egs.shop.model.dto.UserDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -12,15 +14,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface UserMapper {
+public interface CategoryMapper {
 
-    @Mapping(target = "authorities", source = "authorities", qualifiedByName = "toAuthorityNameList")
-    UserDTO toDto(User entity);
+    CategoryDTO toDto(Category entity);
 
-    @Named("toAuthorityNameList")
-    default Set<String> toAuthorityNameList(Set<Authority> authorities) {
-        return authorities.stream()
-                .map(Authority::getName)
-                .collect(Collectors.toSet());
-    }
+    Category toEntity(CategoryDTO dto);
+
+    CategoryDTO toDto(Category entity, long productsCount);
 }

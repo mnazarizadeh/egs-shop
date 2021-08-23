@@ -1,7 +1,7 @@
 package com.egs.shop.handler;
 
 import com.egs.shop.exception.EGSRuntimeException;
-import com.egs.shop.model.constant.ExceptionMessage;
+import com.egs.shop.model.constant.ExceptionMessages;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.core.Ordered;
@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
@@ -29,7 +30,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected @NotNull ResponseEntity<Object> handleHttpMessageNotReadable(@NotNull HttpMessageNotReadableException ex, @NotNull HttpHeaders headers, @NotNull HttpStatus status, @NotNull WebRequest request) {
-        return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, ExceptionMessage.MALFORMED_JSON_REQUEST, ex));
+        return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, ExceptionMessages.MALFORMED_JSON_REQUEST, ex));
     }
 
     private ResponseEntity<Object> buildResponseEntity(ApiError apiError) {
@@ -73,10 +74,18 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(apiError);
     }
 
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Object> handleAccessDeniedExceptions(AccessDeniedException exception) {
+        log.error("Access denied  exception occurred.", exception);
+        ApiError apiError = new ApiError(HttpStatus.FORBIDDEN, exception.getMessage());
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(apiError);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleCommonExceptions(Exception exception) {
         log.error("Common exception occurred.", exception);
-        ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, ExceptionMessage.INTERNAL_ERROR);
+        ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, ExceptionMessages.INTERNAL_ERROR);
         apiError.setDebugMessage(exception.getMessage());
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiError);
@@ -85,7 +94,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Object> handleDatabaseExceptions(DataIntegrityViolationException exception) {
         log.error("Database exception occurred.", exception);
-        ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, ExceptionMessage.DB_ERROR);
+        ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, ExceptionMessages.DB_ERROR);
         apiError.setDebugMessage(exception.getMessage());
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiError);

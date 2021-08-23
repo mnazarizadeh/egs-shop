@@ -3,6 +3,7 @@ package com.egs.shop.model.dto;
 import com.egs.shop.model.constant.Constants;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -33,13 +34,17 @@ public class UserDTO {
     @Size(min = 5, max = 254)
     private String email;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime createDate;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private boolean blocked;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private boolean activated;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Set<String> authorities;
 
 }

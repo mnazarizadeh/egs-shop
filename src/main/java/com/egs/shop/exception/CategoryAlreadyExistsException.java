@@ -5,13 +5,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(code = HttpStatus.BAD_REQUEST)
-public class UsernameAlreadyUsedException extends EGSRuntimeException {
+public class CategoryAlreadyExistsException extends EGSRuntimeException {
 
-    public UsernameAlreadyUsedException(String message) {
+    public CategoryAlreadyExistsException(String message) {
         super(message);
     }
 
-    public UsernameAlreadyUsedException() {
-        this(ExceptionMessages.USERNAME_ALREADY_EXISTS);
+    public CategoryAlreadyExistsException() {
+        this(ExceptionMessages.CATEGORY_ALREADY_EXISTS);
     }
 }

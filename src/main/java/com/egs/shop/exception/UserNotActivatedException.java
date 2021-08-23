@@ -1,6 +1,6 @@
 package com.egs.shop.exception;
 
-import com.egs.shop.model.constant.ExceptionMessage;
+import com.egs.shop.model.constant.ExceptionMessages;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -15,6 +15,6 @@ public class UserNotActivatedException extends EGSRuntimeException {
     }
 
     public UserNotActivatedException() {
-        this(ExceptionMessage.USER_NOT_ACTIVATED);
+        this(ExceptionMessages.USER_NOT_ACTIVATED);
     }
 }

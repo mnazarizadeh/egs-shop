@@ -1,6 +1,6 @@
 package com.egs.shop.exception;
 
-import com.egs.shop.model.constant.ExceptionMessage;
+import com.egs.shop.model.constant.ExceptionMessages;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -15,6 +15,6 @@ public class UserBlockedException extends EGSRuntimeException {
     }
 
     public UserBlockedException() {
-        this(ExceptionMessage.USER_BLOCKED);
+        this(ExceptionMessages.USER_BLOCKED);
     }
 }

@@ -1,6 +1,6 @@
 package com.egs.shop.handler;
 
-import com.egs.shop.model.constant.ExceptionMessage;
+import com.egs.shop.model.constant.ExceptionMessages;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
@@ -41,7 +41,7 @@ class ApiError {
     public ApiError(HttpStatus status, Throwable ex) {
         this();
         this.status = status;
-        this.message = ExceptionMessage.UNEXPECTED_ERROR;
+        this.message = ExceptionMessages.UNEXPECTED_ERROR;
         this.debugMessage = ex.getLocalizedMessage();
     }
 
