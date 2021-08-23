@@ -15,6 +15,8 @@ import com.egs.shop.service.UserService;
 import com.egs.shop.web.rest.vm.ManagedUserVM;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -93,12 +95,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDTO> getAllUsers() {
-        List<User> users = userRepository.findAll();
+    public Page<UserDTO> getAllUsers(Pageable pageable) {
+        Page<User> users = userRepository.findAll(pageable);
 
-        return users.stream()
-                .map(userMapper::toDto)
-                .collect(Collectors.toList());
+        return users.map(userMapper::toDto);
     }
 
     private boolean removeNonActivatedUser(User existingUser) {

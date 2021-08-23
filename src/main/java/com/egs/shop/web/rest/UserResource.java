@@ -9,10 +9,13 @@ import com.egs.shop.security.jwt.JWTFilter;
 import com.egs.shop.security.jwt.JWTToken;
 import com.egs.shop.security.jwt.TokenProvider;
 import com.egs.shop.service.UserService;
+import com.egs.shop.util.PaginationUtil;
 import com.egs.shop.web.rest.vm.LoginVM;
 import com.egs.shop.web.rest.vm.ManagedUserVM;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +26,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -79,12 +83,13 @@ public class UserResource {
 
     @GetMapping("/admin/users")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<List<UserDTO>> getAllUsers() throws URISyntaxException {
+    public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable) throws URISyntaxException {
         log.debug("REST request to get all Users");
 
-        List<UserDTO> users = userService.getAllUsers();
+        Page<UserDTO> page = userService.getAllUsers(pageable);
         return ResponseEntity.ok()
-                .body(users);
+                .headers(PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page))
+                .body(page.getContent());
     }
 
     @GetMapping("/users")
