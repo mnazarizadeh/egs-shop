@@ -34,12 +34,9 @@ public class Rate implements Serializable {
     @Column(name = "create_date", nullable = false)
     private LocalDateTime createDate;
 
-    @Column(name = "confirmed", nullable = false)
-    private boolean confirmed;
-
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User commenter;
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)

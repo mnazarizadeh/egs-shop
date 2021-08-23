@@ -1,7 +1,9 @@
 package com.egs.shop.web.rest;
 
 import com.egs.shop.model.dto.CategoryDTO;
+import com.egs.shop.model.dto.ProductDTO;
 import com.egs.shop.service.CategoryService;
+import com.egs.shop.service.ProductService;
 import com.egs.shop.util.PaginationUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,12 +25,13 @@ import java.util.List;
 public class CategoryResource {
 
     private final CategoryService categoryService;
+    private final ProductService productService;
 
     /**
-     * {@code POST  /admin/categories} : Create a new operation.
+     * {@code POST  /admin/categories} : Create a new category.
      *
      * @param category the category to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new operation, or with status {@code 400 (Bad Request)} if operation failed.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new category, or with status {@code 400 (Bad Request)} if category failed.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/admin/categories")
@@ -54,7 +57,7 @@ public class CategoryResource {
     @PutMapping("/admin/categories/{id}")
     public ResponseEntity<CategoryDTO> updateCategory(@PathVariable(value = "id") final Long id,
                                                        @Valid @RequestBody CategoryDTO category) throws URISyntaxException {
-        log.debug("REST request to update Operation : {}, {}", id, category);
+        log.debug("REST request to update Category : {}, {}", id, category);
 
         category.setId(id);
         CategoryDTO result = categoryService.updateCategory(category);
@@ -111,6 +114,22 @@ public class CategoryResource {
     }
 
     /**
+     * {@code GET  /admin/categories/:id/products} : get the "id" category product list.
+     *
+     * @param id the id of the category to retrieve it's products.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the category, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/admin/categories/{id}/products")
+    public ResponseEntity<List<ProductDTO>> getAllCategoryProducts(@PathVariable Long id, Pageable pageable) {
+        log.debug("REST request to get the products of a Category : {}", id);
+
+        Page<ProductDTO> page = productService.getAllProductsByCategoryId(id, pageable);
+        return ResponseEntity.ok()
+                .headers(PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page))
+                .body(page.getContent());
+    }
+
+    /**
      * {@code GET  /categories/:id} : get the "id" category.
      *
      * @param id the id of the category to retrieve.
@@ -126,9 +145,25 @@ public class CategoryResource {
     }
 
     /**
-     * {@code DELETE  /admin/operations/:id} : delete the "id" operation.
+     * {@code GET  /categories/:id/products} : get the "id" category product list.
      *
-     * @param id the id of the operation to delete.
+     * @param id the id of the category to retrieve it's products.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the category, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/categories/{id}/products")
+    public ResponseEntity<List<ProductDTO>> getEnabledCategoryProducts(@PathVariable Long id, Pageable pageable) {
+        log.debug("REST request to get the products of a enabled Category : {}", id);
+
+        Page<ProductDTO> page = productService.getEnabledProductsByCategoryId(id, pageable);
+        return ResponseEntity.ok()
+                .headers(PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page))
+                .body(page.getContent());
+    }
+
+    /**
+     * {@code DELETE  /admin/categories/:id} : delete the "id" category.
+     *
+     * @param id the id of the category to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/admin/categories/{id}")

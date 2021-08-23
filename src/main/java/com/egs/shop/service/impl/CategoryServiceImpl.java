@@ -1,27 +1,21 @@
 package com.egs.shop.service.impl;
 
-import com.egs.shop.configuration.SecurityConfiguration;
 import com.egs.shop.exception.CategoryAlreadyExistsException;
 import com.egs.shop.exception.CategoryNotFoundException;
-import com.egs.shop.exception.UsernameAlreadyUsedException;
 import com.egs.shop.model.Category;
 import com.egs.shop.model.dto.CategoryDTO;
 import com.egs.shop.model.mapper.CategoryMapper;
 import com.egs.shop.repository.CategoryRepository;
 import com.egs.shop.repository.ProductRepository;
-import com.egs.shop.security.AuthoritiesConstants;
-import com.egs.shop.security.SecurityUtils;
 import com.egs.shop.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 @Transactional

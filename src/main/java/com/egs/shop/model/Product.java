@@ -31,16 +31,13 @@ public class Product implements Serializable {
     private String title;
 
     @Column(name = "price", nullable = false)
-    private Long price;
+    private double price;
 
     @Column(name = "create_date", nullable = false)
     private LocalDateTime createDate;
 
     @Column(name = "enabled", nullable = false)
     private boolean enabled;
-
-    @Column(name = "rate", nullable = false)
-    private float rate;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
