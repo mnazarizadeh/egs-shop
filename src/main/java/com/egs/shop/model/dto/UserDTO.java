@@ -1,6 +1,7 @@
 package com.egs.shop.model.dto;
 
 import com.egs.shop.model.constant.Constants;
+import com.egs.shop.model.constant.ValidationMessages;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -26,7 +27,7 @@ public class UserDTO {
     private long id;
 
     @NotBlank
-    @Pattern(regexp = Constants.USERNAME_REGEX)
+    @Pattern(regexp = Constants.USERNAME_REGEX, message = ValidationMessages.UsernamePattern)
     @Size(min = 3, max = 50)
     private String username;
 
