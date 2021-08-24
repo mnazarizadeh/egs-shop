@@ -21,4 +21,6 @@ public interface UserService {
     String loginUser(LoginVM loginVM);
 
     List<String> getAuthorities();
+
+    UserDTO updateUser(UserDTO userDTO);
 }

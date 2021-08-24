@@ -49,8 +49,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/users/login").permitAll()
-                .antMatchers("/api/users/register").permitAll()
+                .antMatchers("/api/login").permitAll()
+                .antMatchers("/api/register").permitAll()
                 .antMatchers("/api/users/activate").permitAll()
                 .antMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
                 .antMatchers("/api/**").authenticated()
@@ -66,8 +66,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .ignoring()
                 .antMatchers(HttpMethod.OPTIONS, "/**")
                 .antMatchers("/app/**/*.{js,html}")
-                .antMatchers("/api/users/register")
-                .antMatchers("/api/users/login")
+                .antMatchers("/api/register")
+                .antMatchers("/api/login")
                 .antMatchers("/test/**");
     }
 

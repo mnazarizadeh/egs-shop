@@ -31,7 +31,7 @@ public class UserResource {
 
     private final UserService userService;
 
-    @PostMapping("/users/register")
+    @PostMapping("/register")
     public ResponseEntity<UserDTO> registerUser(@Valid @RequestBody ManagedUserVM registerUserDTO) throws URISyntaxException {
         log.debug("REST request to create User : {}", registerUserDTO.getUsername());
 
@@ -42,7 +42,7 @@ public class UserResource {
 
     }
 
-    @PostMapping("/users/login")
+    @PostMapping("/login")
     public ResponseEntity<JWTToken> loginUser(@Valid @RequestBody LoginVM loginVM) {
 
         String jwt = userService.loginUser(loginVM);
@@ -53,6 +53,16 @@ public class UserResource {
         return ResponseEntity.ok()
                 .headers(httpHeaders)
                 .body(new JWTToken(jwt));
+    }
+
+    @PutMapping("/admin/users/{username:.+}")
+    public ResponseEntity<UserDTO> updateUserInfo(@PathVariable String username, @RequestBody UserDTO user) throws URISyntaxException {
+        log.debug("REST request to update User : {}", user);
+
+        user.setUsername(username);
+        UserDTO result = userService.updateUser(user);
+        return ResponseEntity.ok()
+                .body(result);
     }
 
     @GetMapping("/admin/users/{username:.+}")

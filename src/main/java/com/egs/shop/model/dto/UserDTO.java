@@ -38,13 +38,11 @@ public class UserDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime createDate;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private boolean blocked;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private boolean activated;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Set<String> authorities;
 
 }

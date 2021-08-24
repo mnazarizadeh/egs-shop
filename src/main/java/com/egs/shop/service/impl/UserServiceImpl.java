@@ -30,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -131,6 +132,44 @@ public class UserServiceImpl implements UserService {
         return authorityRepository.findAll().stream()
                 .map(Authority::getName)
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Update all information for a specific user, and return the modified user.
+     *
+     * @param userDTO user to update.
+     * @return updated user.
+     */
+    @Override
+    public UserDTO updateUser(UserDTO userDTO) {
+        Optional<User> existingUser = userRepository.findByEmailIgnoreCase(userDTO.getEmail());
+        if (existingUser.isPresent() && (!existingUser.get().getUsername().equals(userDTO.getUsername()))) {
+            throw new EmailAlreadyUsedException();
+        }
+
+        return userRepository.findByUsername(userDTO.getUsername().toLowerCase())
+                .map(
+                        user -> {
+                            user.setUsername(userDTO.getUsername().toLowerCase());
+                            if (userDTO.getEmail() != null) {
+                                user.setEmail(userDTO.getEmail().toLowerCase());
+                            }
+                            user.setBlocked(userDTO.isBlocked());
+                            Set<Authority> managedAuthorities = user.getAuthorities();
+                            managedAuthorities.clear();
+                            userDTO
+                                    .getAuthorities()
+                                    .stream()
+                                    .map(authorityRepository::findById)
+                                    .filter(Optional::isPresent)
+                                    .map(Optional::get)
+                                    .forEach(managedAuthorities::add);
+                            log.debug("Changed Information for User: {}", user);
+                            return user;
+                        }
+                )
+                .map(userMapper::toDto)
+                .orElseThrow(UserNotFoundException::new);
     }
 
     private boolean removeNonActivatedUser(User existingUser) {
