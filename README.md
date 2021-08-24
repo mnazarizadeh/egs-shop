@@ -1,4 +1,6 @@
+
 #Shop Application
+
 It is an assignment by EGS as recruiting process step.
 
 It should be a shop application with two user roles of **ROLE_ADMIN** and **ROLE_USER**
