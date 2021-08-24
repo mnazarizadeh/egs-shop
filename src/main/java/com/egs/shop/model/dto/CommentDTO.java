@@ -9,39 +9,27 @@ import lombok.ToString;
 
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
-public class ProductDTO {
+public class CommentDTO {
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
     @NotBlank
-    private String title;
-
-    @DecimalMin("0.0")
-    private double price;
+    private String message;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime createDate;
 
-    private boolean enabled;
-
-    @NotNull
-    private Long categoryId;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private UserDTO user;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private String categoryName;
-
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private long commentsCount;
-
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private float meanRate;
+    private ProductDTO product;
 }

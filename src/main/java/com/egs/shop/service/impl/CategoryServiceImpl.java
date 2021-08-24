@@ -36,7 +36,6 @@ public class CategoryServiceImpl implements CategoryService {
         newCategory.setEnabled(true);
 
         return categoryMapper.toDto(categoryRepository.save(newCategory));
-
     }
 
     @Override
@@ -75,9 +74,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDTO getEnabledCategoryById(Long id) {
-            return categoryRepository.findByIdAndEnabledIsTrue(id)
-                    .map(category -> categoryMapper.toDto(category, productRepository.countByCategory(category)))
-                    .orElseThrow(CategoryNotFoundException::new);
+        return categoryRepository.findByIdAndEnabledIsTrue(id)
+                .map(category -> categoryMapper.toDto(category, productRepository.countByCategory(category)))
+                .orElseThrow(CategoryNotFoundException::new);
     }
 
     @Override

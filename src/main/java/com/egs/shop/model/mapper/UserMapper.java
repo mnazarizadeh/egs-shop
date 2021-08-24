@@ -17,10 +17,20 @@ public interface UserMapper {
     @Mapping(target = "authorities", source = "authorities", qualifiedByName = "toAuthorityNameList")
     UserDTO toDto(User entity);
 
+    @Mapping(target = "authorities", source = "authorities", qualifiedByName = "toAuthorityList")
+    User toEntity(UserDTO dto);
+
     @Named("toAuthorityNameList")
     default Set<String> toAuthorityNameList(Set<Authority> authorities) {
         return authorities.stream()
                 .map(Authority::getName)
+                .collect(Collectors.toSet());
+    }
+
+    @Named("toAuthorityList")
+    default Set<Authority> toAuthorityList(Set<String> authorities) {
+        return authorities.stream()
+                .map(Authority::new)
                 .collect(Collectors.toSet());
     }
 }

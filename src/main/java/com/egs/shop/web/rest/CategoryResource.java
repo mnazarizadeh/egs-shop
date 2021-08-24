@@ -40,7 +40,7 @@ public class CategoryResource {
 
         CategoryDTO result = categoryService.createCategory(category);
         return ResponseEntity
-                .created(new URI("/api/categories/" + result.getId()))
+                .created(new URI("/api/admin/categories/" + result.getId()))
                 .body(result);
     }
 
