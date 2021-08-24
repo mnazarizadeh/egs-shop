@@ -14,4 +14,8 @@ public class ExceptionMessages {
     public static final String CATEGORY_NOT_FOUND = "Category not found!";
     public static final String CATEGORY_ALREADY_EXISTS = "A category with the same title already exists!";
     public static final String PRODUCT_NOT_FOUND = "Product not found!";
+    public static final String COMMENT_NOT_FOUND = "Requested comment not found!";
+    public static final String AUTHENTICATED_USER_NOT_FOUND = "Authenticated user not found. Please login again.";
+    public static final String COMMENT_ACCESS_DENIED = "You don't have access to this comment";
+    public static final String COMMENT_ALREADY_EXISTS = "You have already commented on this product";
 }

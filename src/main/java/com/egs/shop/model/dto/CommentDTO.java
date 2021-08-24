@@ -9,6 +9,7 @@ import lombok.ToString;
 
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Getter
@@ -32,4 +33,8 @@ public class CommentDTO {
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private ProductDTO product;
+
+    @NotNull
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Long productId;
 }
