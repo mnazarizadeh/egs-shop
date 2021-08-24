@@ -21,6 +21,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -59,50 +61,32 @@ public class ProductServiceImpl implements ProductService {
         product.setCreateDate(existingProduct.getCreateDate());
         product.setCategory(category);
 
-        return productMapper.toDto(
-                productRepository.save(product),
-                commentRepository.countByProduct(product),
-                getAverageRate(product)
-        );
+        return productMapper.toDto(productRepository.save(product));
     }
 
     @Override
     public Page<ProductDTO> getAllProducts(Pageable pageable) {
         return productRepository.findAll(pageable)
-                .map(product -> productMapper.toDto(
-                        product,
-                        commentRepository.countByProduct(product),
-                        getAverageRate(product)
-                ));
+                .map(productMapper::toDto);
     }
 
     @Override
     public Page<ProductDTO> getEnabledProducts(Pageable pageable) {
         return productRepository.findAllByEnabledIsTrue(pageable)
-                .map(product -> productMapper.toDto(
-                        product,
-                        commentRepository.countByProduct(product),
-                        getAverageRate(product)
-                ));
+                .map(productMapper::toDto);
     }
 
     @Override
     public ProductDTO getProductById(Long id) {
         return productRepository.findById(id)
-                .map(product -> productMapper.toDto(
-                        product,
-                        commentRepository.countByProduct(product),
-                        getAverageRate(product)))
+                .map(productMapper::toDto)
                 .orElseThrow(ProductNotFoundException::new);
     }
 
     @Override
     public ProductDTO getEnabledProductById(Long id) {
         return productRepository.findByIdAndEnabledIsTrue(id)
-                .map(product -> productMapper.toDto(
-                        product,
-                        commentRepository.countByProduct(product),
-                        getAverageRate(product)))
+                .map(productMapper::toDto)
                 .orElseThrow(ProductNotFoundException::new);
     }
 
@@ -118,31 +102,43 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Page<ProductDTO> getEnabledProductsByCategoryId(Long id, Pageable pageable) {
         return productRepository.findByEnabledIsTrueAndCategoryIdAndCategoryEnabledIsTrue(id, pageable)
-                .map(product ->
-                        productMapper.toDto(
-                                product,
-                                commentRepository.countByProduct(product),
-                                getAverageRate(product)
-                        )
+                .map(productMapper::toDto
                 );
     }
 
     @Override
     public Page<ProductDTO> getAllProductsByCategoryId(Long id, Pageable pageable) {
         return productRepository.findByCategoryId(id, pageable)
-                .map(product -> productMapper.toDto(
-                        product,
-                        commentRepository.countByProduct(product),
-                        getAverageRate(product)
-                ));
+                .map(productMapper::toDto);
     }
 
-    private float getAverageRate(Product product) {
-        float avg = (float) rateRepository.findAllByProductId(product.getId()).stream()
+    @Override
+    public ProductDTO updateCommentsInfo(Long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(ProductNotFoundException::new);
+
+        product.setCommentsCount(commentRepository.countByProduct(product));
+        return productMapper.toDto(productRepository.save(product));
+    }
+
+    @Override
+    public ProductDTO updateRatesInfo(Long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(ProductNotFoundException::new);
+
+        List<Rate> productRates = rateRepository.findAllByProductId(product.getId());
+
+        float avg = (float) productRates
+                .stream()
                 .map(Rate::getPoint)
                 .mapToInt(Integer::new)
                 .average()
                 .orElse(0);
-        return MathUtils.round(avg,1);
+
+        product.setAvgRate(MathUtils.round(avg,1));
+        product.setRatesCount(productRates.size());
+
+        return productMapper.toDto(productRepository.save(product));
     }
+
 }

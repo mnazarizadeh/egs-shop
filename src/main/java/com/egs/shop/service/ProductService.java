@@ -24,4 +24,8 @@ public interface ProductService {
 
     Page<ProductDTO> getAllProductsByCategoryId(Long id, Pageable pageable);
 
+    ProductDTO updateCommentsInfo(Long productId);
+
+    ProductDTO updateRatesInfo(Long productId);
+
 }

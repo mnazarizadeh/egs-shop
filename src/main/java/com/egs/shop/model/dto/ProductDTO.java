@@ -33,15 +33,20 @@ public class ProductDTO {
 
     private boolean enabled;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private float avgRate;
+
     @NotNull
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long categoryId;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private String categoryName;
+    private CategoryDTO category;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private long commentsCount;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private float meanRate;
+    private long ratesCount;
+
 }

@@ -39,6 +39,15 @@ public class Product implements Serializable {
     @Column(name = "enabled", nullable = false)
     private boolean enabled;
 
+    @Column(name = "avg_rate", nullable = false)
+    private float avgRate;
+
+    @Column(name = "rates_count", nullable = false)
+    private long ratesCount;
+
+    @Column(name = "comments_count", nullable = false)
+    private long commentsCount;
+
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;

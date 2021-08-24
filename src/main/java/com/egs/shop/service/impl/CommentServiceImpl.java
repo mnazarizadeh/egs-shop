@@ -11,6 +11,7 @@ import com.egs.shop.repository.ProductRepository;
 import com.egs.shop.repository.UserRepository;
 import com.egs.shop.security.SecurityUtils;
 import com.egs.shop.service.CommentService;
+import com.egs.shop.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -26,6 +27,7 @@ import java.time.LocalDateTime;
 @Slf4j
 public class CommentServiceImpl implements CommentService {
 
+    private final ProductService productService;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final CommentRepository commentRepository;
@@ -51,7 +53,10 @@ public class CommentServiceImpl implements CommentService {
         newComment.setUser(user);
         newComment.setCreateDate(LocalDateTime.now());
 
-        return commentMapper.toDto(commentRepository.save(newComment));
+        CommentDTO result = commentMapper.toDto(commentRepository.save(newComment));
+
+        result.setProduct(productService.updateCommentsInfo(newComment.getProduct().getId()));
+        return result;
     }
 
     @Override
@@ -99,7 +104,10 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void deleteById(Long id) {
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(CommentNotFoundException::new);
         commentRepository.deleteById(id);
+        productService.updateCommentsInfo(comment.getProduct().getId());
     }
 
     @Override
@@ -107,7 +115,8 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(CommentNotFoundException::new);
         checkUserAccess(comment);
-        this.deleteById(id);
+        commentRepository.deleteById(id);
+        productService.updateCommentsInfo(comment.getProduct().getId());
     }
 
     @Override

@@ -9,6 +9,7 @@ import lombok.ToString;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Getter
@@ -33,4 +34,8 @@ public class RateDTO {
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private ProductDTO product;
+
+    @NotNull
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Long productId;
 }
