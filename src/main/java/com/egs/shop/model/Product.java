@@ -39,8 +39,8 @@ public class Product implements Serializable {
     @Column(name = "enabled", nullable = false)
     private boolean enabled;
 
-    @Column(name = "avg_rate", nullable = false)
-    private float avgRate;
+    @Column(name = "rate", nullable = false)
+    private float rate;
 
     @Column(name = "rates_count", nullable = false)
     private long ratesCount;

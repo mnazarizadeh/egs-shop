@@ -4,6 +4,8 @@ import com.egs.shop.model.dto.ProductDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface ProductService {
 
     ProductDTO createProduct(ProductDTO productDTO);
@@ -28,4 +30,5 @@ public interface ProductService {
 
     ProductDTO updateRatesInfo(Long productId);
 
+    List<ProductDTO> search(String search);
 }

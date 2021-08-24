@@ -34,7 +34,7 @@ public class ProductDTO {
     private boolean enabled;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private float avgRate;
+    private float rate;
 
     @NotNull
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

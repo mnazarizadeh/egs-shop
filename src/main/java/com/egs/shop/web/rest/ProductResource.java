@@ -211,4 +211,12 @@ public class ProductResource {
                 .build();
     }
 
+    @GetMapping("/products/search")
+    public ResponseEntity<List<ProductDTO>> search(@RequestParam(value = "search") String search) {
+        log.debug("REST request to search Products : {}", search);
+
+        return ResponseEntity.ok()
+                .body(productService.search(search));
+    }
+
 }
