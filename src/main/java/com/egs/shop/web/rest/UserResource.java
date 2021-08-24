@@ -95,4 +95,12 @@ public class UserResource {
                 .body(user);
     }
 
+    @GetMapping("/admin/authorities")
+    public ResponseEntity<List<String>> getAuthorities() throws URISyntaxException {
+        log.debug("REST request to get all Authorities");
+
+        List<String> authorities = userService.getAuthorities();
+        return ResponseEntity.ok()
+                .body(authorities);
+    }
 }
