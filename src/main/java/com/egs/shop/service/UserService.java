@@ -1,8 +1,8 @@
 package com.egs.shop.service;
 
 import com.egs.shop.model.dto.UserDTO;
-import com.egs.shop.web.rest.vm.LoginVM;
-import com.egs.shop.web.rest.vm.ManagedUserVM;
+import com.egs.shop.model.dto.LoginVM;
+import com.egs.shop.model.dto.ManagedUserVM;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

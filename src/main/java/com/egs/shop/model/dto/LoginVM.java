@@ -1,4 +1,4 @@
-package com.egs.shop.web.rest.vm;
+package com.egs.shop.model.dto;
 
 import lombok.Getter;
 import lombok.Setter;

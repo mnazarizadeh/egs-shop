@@ -1,9 +1,8 @@
-package com.egs.shop.web.rest.vm;
+package com.egs.shop.model.dto;
 
 import com.egs.shop.model.constant.Constants;
 import com.egs.shop.model.dto.UserDTO;
 import com.egs.shop.validator.PasswordMatches;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;

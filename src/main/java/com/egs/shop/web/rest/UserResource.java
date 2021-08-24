@@ -1,17 +1,14 @@
 package com.egs.shop.web.rest;
 
 import com.egs.shop.exception.UserNotFoundException;
-import com.egs.shop.model.User;
+import com.egs.shop.model.dto.LoginVM;
+import com.egs.shop.model.dto.ManagedUserVM;
 import com.egs.shop.model.dto.UserDTO;
-import com.egs.shop.security.AuthoritiesConstants;
 import com.egs.shop.security.SecurityUtils;
 import com.egs.shop.security.jwt.JWTFilter;
 import com.egs.shop.security.jwt.JWTToken;
-import com.egs.shop.security.jwt.TokenProvider;
 import com.egs.shop.service.UserService;
 import com.egs.shop.util.PaginationUtil;
-import com.egs.shop.web.rest.vm.LoginVM;
-import com.egs.shop.web.rest.vm.ManagedUserVM;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
