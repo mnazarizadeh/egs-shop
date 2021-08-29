@@ -6,8 +6,14 @@ It is an assignment by EGS as recruiting process step.
 It should be a shop application with two user roles of **ROLE_ADMIN** and **ROLE_USER**
 
 ## Requirements
+
+JAVA 8
+
+Spring Boot version 2.5.4
+
+
 ### DB config
-MYSQL 8.0 DB
+Database server is MYSQL 8.0.25
 
     db_name: shop
     user: app
