@@ -21,3 +21,5 @@ This is an admin user that can manage all other users.
 
     user: admin
     pass: 123456
+
+The Postman collection added to repository in the root directory.
